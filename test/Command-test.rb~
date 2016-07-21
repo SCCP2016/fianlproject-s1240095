@@ -1,0 +1,9 @@
+require 'test/unit'
+require '../src/CommandParser'
+
+class CommandTest < Test::Unit::TestCase
+  def test_parse
+    cmdpr = Command.new(["generate","Prog0","-h","Ex","-format","1","-m","13"])
+    assert_equal  cmdpr.parse
+  end
+end

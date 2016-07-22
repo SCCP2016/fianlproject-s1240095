@@ -20,9 +20,9 @@ attr_reader :argv
             when "h" then
               dir_h = @argv[i+1]
             when "f" then
-              fmt = @argv[i+1]
+              fmt = @argv[i+1].to_i
             when "m" then
-              max = @argv[i+1]
+              max = @argv[i+1].to_i
             end
             i += 2
           end

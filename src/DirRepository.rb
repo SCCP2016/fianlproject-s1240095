@@ -10,7 +10,7 @@ class DirRepository
 
   def make
     Dir.mkdir(@name,0705)
-    (1..max).to_a.each{|item| Dir.mkdir("%s/%s%2d"%[@name,@header,item])
+    (1..max).to_a.each{|item| Dir.mkdir("%s/%s%2d"%[@name,@header,item])}
   end
 
 end

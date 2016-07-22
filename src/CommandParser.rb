@@ -8,6 +8,9 @@ attr_reader :argv
 
   def parse
     if (@argv[0] == "g")||(@argv[0] == "generate") then
+      if @argv.count < 2 then
+        raise "CommandPerse:Failed to perse"
+      end
       exdir = @argv[1]
       i=2
       dir_h = "Ex"
@@ -24,7 +27,9 @@ attr_reader :argv
             when "m" then
               max = @argv[i+1].to_i
             end
-            i += 2
+            i +=2
+          else
+            raise "CommandPerse:Failed to perse"
           end
         else
           raise "CommandPerse:Failed to perse"
@@ -32,9 +37,13 @@ attr_reader :argv
       end
       Command.new(@argv[0],exdir,dir_h,fmt,max)
     elsif (@argv[0] == "s")||(@argv[0] == "submit") then
-
+      if @argv.count < 2 then
+          raise "CommandPerse:Failed to perse"
+      end
+      exdir = @argv[1]
+      Command.new(@argv[0],exdir,"",0,0)
     elsif (@argv[0] == "l")||(@argv[0] == "list") then
-
+      Command.new(@argv[0],"","",0,0)
     else
 
     end

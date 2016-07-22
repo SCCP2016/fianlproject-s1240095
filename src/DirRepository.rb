@@ -10,7 +10,13 @@ class DirRepository
 
   def make
     Dir.mkdir(@name,0705)
-    (1..@max).to_a.each{|item| Dir.mkdir("%s/%s%2d"%[@name,@header,item])}
+    if @format==1 then 
+      (1..@max).to_a.each{|item| Dir.mkdir("%s/%s%d"%[@name,@header,item])}
+    elsif @format==2 then
+      (1..@max).to_a.each{|item| Dir.mkdir("%s/%s%02d"%[@name,@header,item])}
+    else
+      raise "DirRepository:Format error"
+    end
   end
 
 end

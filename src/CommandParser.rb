@@ -27,7 +27,7 @@ attr_reader :argv
             i += 2
           end
         else
-          raise "CommandPerseエラー"
+          raise "CommandPerse:Failed to perse"
         end
       end
       Command.new(@argv[0],exdir,dir_h,fmt,max)

@@ -1,2 +1,4 @@
 require 'test/unit'
-require_relative '../src/
+require_relative '../src/exdirmng'
+
+

@@ -49,13 +49,13 @@ class Main
         puts ""
         puts "Submission status (" + count.to_s + "/" + max.to_s + ")"
       when "list"
-        dlist = ""
         for d in Dir.entries(Dir.pwd)
           if (d == ".") || (d == "..") then next end
           if Dir.exists?(d) then
             if File.exist?(d + "/.exdirmng.conf") then print d + " " end
           end
         end
+        puts ""
       end
     end
   end

@@ -35,21 +35,25 @@ attr_reader :argv
           raise "CommandPerse:Failed to perse"
         end
       end
-      Command.new(@argv[0],exdir,dir_h,fmt,max)
+      Command.new("generate",exdir,dir_h,fmt,max)
     elsif (@argv[0] == "s")||(@argv[0] == "submit") then
       if @argv.count < 2 then
           raise "CommandParse:Failed to perse"
       end
       exdir = @argv[1]
-      Command.new(@argv[0],exdir,"",0,0)
+      Command.new("submit",exdir,"",0,0)
     elsif (@argv[0] == "l")||(@argv[0] == "list") then
-      Command.new(@argv[0],"","",0,0)
+      Command.new("list","","",0,0)
     elsif (@argv[0] == "moo") then
       puts "Hello, moo!"
       puts "And I am tired... (__))..zzzZZZ"
       exit
     else
-      Command.new("directory","","",0,0)
+      if Dir.exist?(@argv[0]) then
+        Command.new("directory",@argv[0],"",0,0)
+      else
+        puts "Unknown command."
+      end
     end
   end
 end

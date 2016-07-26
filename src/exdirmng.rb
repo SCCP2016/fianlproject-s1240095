@@ -56,6 +56,25 @@ class Main
           end
         end
         puts ""
+      when "directory"
+        if !File.exist?(cmd.dir_name + "/.exdirmng.conf") then exit end
+        conf = open(cmd.dir_name + "/.exdirmng.conf",'r')
+        max = conf.read.split("\n")[2]
+        count = 0
+        for d in Dir.entries(cmd.dir_name)
+          if (d == ".") || (d == "..") then next end
+          if Dir.exists?(cmd.dir_name + "/" + d) then
+            if Dir.entries(cmd.dir_name + "/" + d).count > 2 then 
+              print "[o]"
+              count += 1
+            else
+              print "[x]"
+            end
+            print d + " "
+          end
+        end
+        puts ""
+        puts "Submission status (" + count.to_s + "/" + max.to_s + ")"
       end
     end
   end

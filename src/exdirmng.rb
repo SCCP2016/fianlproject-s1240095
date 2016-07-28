@@ -4,23 +4,7 @@ require_relative '../src/DirRepository'
 class Main
   def initialize()
     if ARGV.count==0 then
-      puts "Usage: exdirmng [COMMAND] [DIRECTORY] [OPTION]"
-      puts "Create and manage assignment directories."
-      puts ""
-      puts "You can use following commands:"
-      puts "generate      Create assignment directory."
-      puts "submit        Check submission status."
-      puts "list          List made directories."
-      puts ""
-      puts "You can also use following options:"
-      puts "-h, -header   Directory name starts with specification header."
-      puts "              Default is Ex."
-      puts "-f, -format   Set directory number format. Default is 1."
-      puts "              If format is 1, numbers don't contain 0."
-      puts "              If format is 2, numbers contain 0 like 01,02..."
-      puts "-m, -max      Set how many directories make. Default is 13."
-      puts ""
-      puts ""
+      helpmsg
       exit
     else
       cp = CommandParser.new(ARGV)
@@ -30,53 +14,74 @@ class Main
         dr = DirRepository.new(cmd.dir_name,cmd.header,cmd.format,cmd.max)
         dr.make
       when "submit"
-        if !File.exist?(cmd.dir_name + "/.exdirmng.conf") then exit end
+        exit if !File.exist?(cmd.dir_name + "/.exdirmng.conf")
         conf = open(cmd.dir_name + "/.exdirmng.conf",'r')
         max = conf.read.split("\n")[2]
+        scount = 0
         count = 0
         for d in Dir.entries(cmd.dir_name)
-          if (d == ".") || (d == "..") then next end
+          next if (d == ".") || (d == "..")
           if Dir.exists?(cmd.dir_name + "/" + d) then
             if Dir.entries(cmd.dir_name + "/" + d).count > 2 then 
               print "[o]"
-              count += 1
+              scount += 1
             else
               print "[x]"
             end
             print d + " "
+            count += 1
+            if count ==10 then
+              puts ""
+              count == 0
+            end
           end
         end
         puts ""
-        puts "Submission status (" + count.to_s + "/" + max.to_s + ")"
+        puts "Submission status (" + scount.to_s + "/" + max.to_s + ")"
       when "list"
-        for d in Dir.entries(Dir.pwd)
-          if (d == ".") || (d == "..") then next end
-          if Dir.exists?(d) then
-            if File.exist?(d + "/.exdirmng.conf") then print d + " " end
-          end
-        end
-        puts ""
-      when "directory"
-        if !File.exist?(cmd.dir_name + "/.exdirmng.conf") then exit end
-        conf = open(cmd.dir_name + "/.exdirmng.conf",'r')
-        max = conf.read.split("\n")[2]
-        count = 0
-        for d in Dir.entries(cmd.dir_name)
-          if (d == ".") || (d == "..") then next end
-          if Dir.exists?(cmd.dir_name + "/" + d) then
-            if Dir.entries(cmd.dir_name + "/" + d).count > 2 then 
-              print "[o]"
-              count += 1
-            else
-              print "[x]"
-            end
-            print d + " "
-          end
-        end
-        puts ""
-        puts "Submission status (" + count.to_s + "/" + max.to_s + ")"
+        sdir(Dir.home,1,cmd.verbose)
+        sdir(Dir.pwd,1,cmd.verbose) if Dir.home.split('/').count + 2< Dir.pwd.split('/').count
+        puts "" if cmd.verbose == 0
       end
     end
+  end
+
+  def sdir(path,n,isv)
+    return if (n > 3)
+    for d in Dir.entries(path)
+      next if (d == ".") || (d == "..")
+      if Dir.exists?(path + "/" + d) then
+        if File.exist?(path + "/" + d + "/.exdirmng.conf") then
+          if isv == 1 then
+            puts path + "/" + d + " "
+          else
+            print d + " "
+          end
+        else
+          sdir(path + "/" + d,n+1,isv)
+        end
+      end
+    end
+  end
+
+  def helpmsg()
+    puts "Usage: exdirmng [COMMAND] [DIRECTORY] [OPTION]"
+    puts "Create and manage assignment directories."
+    puts ""
+    puts "You can use following commands:"
+    puts "generate      Create assignment directory."
+    puts "submit        Check submission status."
+    puts "list          List made directories."
+    puts ""
+    puts "You can use following options:"
+    puts "-h, -header   Directory name starts with specification header."
+    puts "              Default is Ex."
+    puts "-f, -format   Set directory number format. Default is 1."
+    puts "              If format is 1, numbers don't contain 0."
+    puts "              If format is 2, numbers contain 0 like 01,02..."
+    puts "-m, -max      Set how many directories make. Default is 13."
+    puts ""
+    puts ""
   end
 end
 

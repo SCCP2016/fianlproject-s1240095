@@ -1,3 +1,3 @@
 #! /usr/local/gnu/bin/bash
 
-ruby ~/sccp/finalassignment/fianlproject-s1240095/src/exdirmng.rb $*
+ruby ~/sccp/fianlproject-s1240095/src/exdirmng.rb $*
